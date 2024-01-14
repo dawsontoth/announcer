@@ -15,7 +15,6 @@ const atemIP = '10.1.34.34';
 
   myAtem.on('stateChanged', async (state, pathToChange) => {
     console.log('stateChanged', pathToChange.sort());
-    // TODO: Handle lower thirds.
     const previewName = inputs[state.video.mixEffects[0].previewInput - 1];
     const programName = inputs[state.video.mixEffects[0].programInput - 1];
     if (pathToChange.includes('video.mixEffects.0.transitionPosition')) {
@@ -32,6 +31,10 @@ const atemIP = '10.1.34.34';
     }
     if (pathToChange.includes('video.mixEffects.0.previewInput')) {
       return play(previewName);
+    }
+    if (pathToChange.includes('video.mixEffects.0.upstreamKeyers.0.onAir')) {
+      const onAir = state.video.mixEffects[0].upstreamKeyers[0].onAir;
+      return play(`lower thirds ${onAir ? 'on' : 'off'}`);
     }
   });
   myAtem.on('receivedCommand', (command) => {
@@ -85,6 +88,7 @@ function sleep(ms = 1000) {
 }
 
 function play(name) {
+  console.log(`Playing ${name}`);
   audios.push(player.play(`audio/${name}.m4a`));
 }
 
