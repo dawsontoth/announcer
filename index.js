@@ -2,10 +2,17 @@ const playSound = require('play-sound');
 const { Atem } = require('atem-connection');
 
 process.on('SIGINT', cleanUp);
-const audios = [];
+let audios = [];
 const player = playSound(opts = {});
 const myAtem = new Atem();
-const inputs = ['main', 'wide', 'left', 'right', 'guitar', 'drums', 'lower thirds fill', 'tripod', 'flycam', 'piano', 'floor', 'video wall main', 'handheld', 'audience', 'video', 'lower thirds key', 'confidence', 'video wall columns', 'desktop', 'hyperdeck'];
+const inputs = [
+  'main', 'wide', 'left', 'right', 'guitar',
+  'drums', 'piano', 'video', 'tripod', 'flycam',
+  'handheld', 'confidence', 'floor', 'audience', '',
+  'lower thirds fill', '', '', 'desktop', 'hyperdeck',
+];
+
+
 const superSourceName = 'SS1';
 const atemIP = '10.1.34.34';
 // const superSourceName = 'MP2';
@@ -14,6 +21,9 @@ const atemIP = '10.1.34.34';
 (async () => {
 
   myAtem.on('stateChanged', async (state, pathToChange) => {
+    // TODO: Tighten up timings.
+    // TODO: Daemon.
+    // TODO: Tapping preview multiple times ideally would trigger the name to be said again.
     console.log('stateChanged', pathToChange.sort());
     const previewName = inputs[state.video.mixEffects[0].previewInput - 1];
     const programName = inputs[state.video.mixEffects[0].programInput - 1];
@@ -70,14 +80,6 @@ const atemIP = '10.1.34.34';
     //   await myAtem.cut();
     //   await sleep(2000);
     // }
-    // await sleep(2000);
-    // await myAtem.cut();
-    // await sleep(2000);
-    // await myAtem.setUpstreamKeyerOnAir(true, 1, 1);
-    // await sleep(2000);
-    // await myAtem.setUpstreamKeyerOnAir(false, 1, 1);
-    // await sleep(2000);
-    // await myAtem.setUpstreamKeyerOnAir(true, 1, 1);
   });
 
   await myAtem.connect(atemIP);
@@ -89,7 +91,9 @@ function sleep(ms = 1000) {
 
 function play(name) {
   console.log(`Playing ${name}`);
-  audios.push(player.play(`audio/${name}.m4a`));
+  audios?.forEach(audio => audio.kill());
+  audios = [];
+  audios.push(player.play(`audio/${name}.m4a`, { mplayer: ['-ss', '0.15'] }));
 }
 
 async function cleanUp() {
