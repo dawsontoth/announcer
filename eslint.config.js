@@ -1,16 +1,14 @@
 // eslint.config.js
-import {defineConfig, globalIgnores} from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import eslintJs from '@eslint/js';
 
 export default defineConfig([
   eslintJs.configs.recommended,
-  globalIgnores([
-    "dist/**/*",
-  ]),
+  globalIgnores(['dist/**/*']),
   {
-    files: ['src/**/*.ts'],
+    files: ['**/*.[jt]s'],
     languageOptions: {
       parser: tsParser,
       ecmaVersion: 2018,
@@ -26,12 +24,12 @@ export default defineConfig([
       }
     },
     plugins: {
-      '@typescript-eslint': tseslint,
+      '@typescript-eslint': tseslint
     },
     rules: {
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always'],
-      'indent': ['error', 2],
+      quotes: ['error', 'single'],
+      semi: ['error', 'always'],
+      indent: ['error', 2],
       'no-multi-spaces': ['error'],
       'no-trailing-spaces': ['error'],
       'object-curly-spacing': ['error', 'always'],
@@ -40,7 +38,10 @@ export default defineConfig([
       'no-console': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }]
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_' }
+      ]
     }
   }
 ]);
