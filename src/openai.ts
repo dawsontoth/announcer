@@ -1,6 +1,7 @@
-import fs, { existsSync, mkdirSync } from 'fs';
+import { Buffer } from 'node:buffer';
+import fs, { existsSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 import OpenAI from 'openai';
-import { join } from 'path';
 
 const openai = new OpenAI();
 const intoDir = './speech.cache/';
