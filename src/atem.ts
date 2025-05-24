@@ -2,7 +2,6 @@ import { Atem } from 'atem-connection';
 import type { InputChannel } from 'atem-connection/dist/state/input';
 import { play } from 'src/audio';
 import { env } from 'src/env';
-import { convertTextToSpeech } from 'src/openai';
 import { formatString } from 'src/utils/format-string';
 import { sleep } from 'src/utils/sleep';
 
@@ -10,8 +9,6 @@ const myAtem = new Atem();
 
 export async function connect(): Promise<void> {
   // Precompute speeches.
-  await convertTextToSpeech('flycam');
-  await convertTextToSpeech('wide');
   // for (const input of env.inputNames) {
   //   await convertTextToSpeech(formatString(env.fadedFormat, input));
   //   await convertTextToSpeech(formatString(env.fadingFormat, input));
