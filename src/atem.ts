@@ -2,6 +2,7 @@ import { Atem } from 'atem-connection';
 import type { InputChannel } from 'atem-connection/dist/state/input';
 import { play } from 'src/audio';
 import { env } from 'src/env';
+import { convertTextToSpeech } from 'src/openai';
 import { formatString } from 'src/utils/format-string';
 import { sleep } from 'src/utils/sleep';
 
@@ -9,16 +10,16 @@ const myAtem = new Atem();
 
 export async function connect(): Promise<void> {
   // Precompute speeches.
-  // for (const input of env.inputNames) {
-  //   await convertTextToSpeech(formatString(env.fadedFormat, input));
-  //   await convertTextToSpeech(formatString(env.fadingFormat, input));
-  //   await convertTextToSpeech(formatString(env.cutFormat, input));
-  //   await convertTextToSpeech(formatString(env.previewFormat, input));
-  // }
-  // for (const keyerName of env.keyerNames) {
-  //   await convertTextToSpeech(formatString(env.keyerOnFormat, keyerName));
-  //   await convertTextToSpeech(formatString(env.keyerOffFormat, keyerName));
-  // }
+  for (const input of env.inputNames) {
+    await convertTextToSpeech(formatString(env.fadedFormat, input));
+    await convertTextToSpeech(formatString(env.fadingFormat, input));
+    await convertTextToSpeech(formatString(env.cutFormat, input));
+    await convertTextToSpeech(formatString(env.previewFormat, input));
+  }
+  for (const keyerName of env.keyerNames) {
+    await convertTextToSpeech(formatString(env.keyerOnFormat, keyerName));
+    await convertTextToSpeech(formatString(env.keyerOffFormat, keyerName));
+  }
 
   myAtem.on('connected', connected);
   myAtem.on('stateChanged', stateChanged);
