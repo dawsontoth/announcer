@@ -1,35 +1,31 @@
 import { Atem } from 'atem-connection';
 import type { InputChannel } from 'atem-connection/dist/state/input';
 import { play } from 'src/audio';
+import { env } from 'src/env';
 import { convertTextToSpeech } from 'src/openai';
-import { envToCSV } from 'src/utils/env-to-csv';
 import { formatString } from 'src/utils/format-string';
 import { sleep } from 'src/utils/sleep';
 
 const myAtem = new Atem();
-const inputs: string[] = envToCSV(process.env.INPUT_NAMES!);
-const superSourceNames = envToCSV(process.env.SUPER_SOURCE_NAMES!);
-const keyerNames = envToCSV(process.env.KEYER_NAMES!);
-const atemIP = process.env.ATEM_IP!;
 
 export async function connect(): Promise<void> {
   // Precompute speeches.
-  await convertTextToSpeech("flycam");
-  await convertTextToSpeech("wide");
-  // for (const input of inputs) {
-  //   await convertTextToSpeech(formatString(process.env.FADED_FORMAT!, input));
-  //   await convertTextToSpeech(formatString(process.env.FADING_FORMAT!, input));
-  //   await convertTextToSpeech(formatString(process.env.CUT_FORMAT!, input));
-  //   await convertTextToSpeech(formatString(process.env.PREVIEW_FORMAT!, input));
+  await convertTextToSpeech('flycam');
+  await convertTextToSpeech('wide');
+  // for (const input of env.inputNames) {
+  //   await convertTextToSpeech(formatString(env.fadedFormat, input));
+  //   await convertTextToSpeech(formatString(env.fadingFormat, input));
+  //   await convertTextToSpeech(formatString(env.cutFormat, input));
+  //   await convertTextToSpeech(formatString(env.previewFormat, input));
   // }
-  // for (const keyerName of keyerNames) {
-  //   await convertTextToSpeech(formatString(process.env.KEYER_ON_FORMAT!, keyerName));
-  //   await convertTextToSpeech(formatString(process.env.KEYER_OFF_FORMAT!, keyerName));
+  // for (const keyerName of env.keyerNames) {
+  //   await convertTextToSpeech(formatString(env.keyerOnFormat, keyerName));
+  //   await convertTextToSpeech(formatString(env.keyerOffFormat, keyerName));
   // }
 
   myAtem.on('connected', connected);
   myAtem.on('stateChanged', stateChanged);
-  await myAtem.connect(atemIP);
+  await myAtem.connect(env.atemIP);
 }
 
 async function connected() {
@@ -38,35 +34,35 @@ async function connected() {
   const superSources = Object.values(myAtem.state?.inputs || {}).filter((input): input is InputChannel => !!input?.shortName?.startsWith('SS'));
   for (const superSource of superSources) {
     const superSourceNumber = parseInt(superSource.shortName.replace(/ss/ig, ''), 10);
-    inputs[superSource.inputId - 1] = superSourceNames[superSourceNumber - 1];
+    env.inputNames[superSource.inputId - 1] = env.superSourceNames[superSourceNumber - 1];
   }
 }
 
 async function stateChanged(state: any, pathToChange: string[]) {
   // TODO: Tapping preview multiple times ideally would trigger the name to be said again.
   console.log('stateChanged', pathToChange.sort());
-  const previewName = inputs[state.video.mixEffects[0].previewInput - 1];
-  const programName = inputs[state.video.mixEffects[0].programInput - 1];
+  const previewName = env.inputNames[state.video.mixEffects[0].previewInput - 1];
+  const programName = env.inputNames[state.video.mixEffects[0].programInput - 1];
   if (pathToChange.includes('video.mixEffects.0.transitionPosition')) {
     if (pathToChange.includes('video.mixEffects.0.programInput')) {
-      return play(formatString(process.env.FADED_FORMAT!, programName));
+      return play(formatString(env.fadedFormat, programName));
     }
     if (pathToChange.includes('video.mixEffects.0.previewInput')) {
-      return play(formatString(process.env.FADING_FORMAT!, previewName));
+      return play(formatString(env.fadingFormat, previewName));
     }
     return;
   }
   // TODO: Support multiple m/es.
   if (pathToChange.includes('video.mixEffects.0.programInput')) {
-    return play(formatString(process.env.CUT_FORMAT!, programName));
+    return play(formatString(env.cutFormat, programName));
   }
   if (pathToChange.includes('video.mixEffects.0.previewInput')) {
-    return play(formatString(process.env.PREVIEW_FORMAT!, previewName));
+    return play(formatString(env.previewFormat, previewName));
   }
   // TODO: Support multiple keyers.
   if (pathToChange.includes('video.mixEffects.0.upstreamKeyers.0.onAir')) {
     const onAir = state.video.mixEffects[0].upstreamKeyers[0].onAir;
-    return play(formatString(onAir ? process.env.KEYER_ON_FORMAT! : process.env.KEYER_OFF_FORMAT!, keyerNames[0]));
+    return play(formatString(onAir ? env.keyerOnFormat : env.keyerOffFormat, env.keyerNames[0]));
   }
 }
 
