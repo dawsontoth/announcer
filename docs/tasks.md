@@ -4,25 +4,12 @@ This document contains a comprehensive, logically ordered checklist of improveme
 
 ## Architecture Improvements
 
-[x] Implement a proper error handling strategy throughout the application
 [ ] Refactor the ATEM state change handling to use a more maintainable pattern (e.g., strategy pattern)
-[ ] Implement dependency injection for better testability and flexibility
-[ ] Create a proper logging system instead of using console.log
-[ ] Separate configuration loading from business logic for better separation of concerns
-[ ] Create a proper application lifecycle management system
 
 ## Code Quality Improvements
 
-[ ] Add proper TypeScript types for all function parameters and return values
-[ ] Implement the TODOs in atem.ts:
-   [ ] Support for multiple M/Es (Mix Effects)
-   [ ] Support for multiple keyers
-   [ ] Improve handling of repeated preview taps
-[ ] Add proper error handling for OpenAI API calls
 [ ] Add validation for environment variables with meaningful error messages
-[ ] Refactor the audio.ts module to handle errors when playing sounds
 [ ] Replace non-null assertions (!) with proper null checks
-[ ] Implement a more robust file naming strategy for cached speech files
 
 ## Testing Improvements
 
@@ -57,12 +44,10 @@ This document contains a comprehensive, logically ordered checklist of improveme
 
 ## Performance Improvements
 
-[ ] Optimize the text-to-speech caching mechanism
 [ ] Implement batch processing for precomputing speeches
 [ ] Add performance monitoring
 [ ] Optimize memory usage for long-running instances
 [ ] Implement connection retry mechanism with exponential backoff
-[ ] Optimize audio playback for low-resource environments
 
 ## Security Improvements
 

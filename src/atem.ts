@@ -1,4 +1,4 @@
-import { Atem } from 'atem-connection';
+import { Atem, AtemState } from 'atem-connection';
 import type { InputChannel } from 'atem-connection/dist/state/input';
 import { play } from 'src/audio';
 import { env } from 'src/env';
@@ -53,7 +53,7 @@ export async function connect(): Promise<void> {
   }
 }
 
-async function connected() {
+async function connected(): Promise<void> {
   try {
     console.log('ATEM connected callback triggered');
     await sleep(2000);
@@ -85,7 +85,7 @@ async function connected() {
   }
 }
 
-async function stateChanged(state: any, pathToChange: string[]) {
+async function stateChanged(state: AtemState, pathToChange: string[]): Promise<void> {
   try {
     // TODO: Tapping preview multiple times ideally would trigger the name to be said again.
     console.log('stateChanged', pathToChange.sort());
