@@ -46,7 +46,6 @@ export async function connect(): Promise<void> {
 
     console.log(`Connecting to ATEM at ${env.atemIP}...`);
     await myAtem.connect(env.atemIP);
-    console.log('ATEM connection established');
   } catch (error) {
     console.error('Error during ATEM connection setup:', error);
     throw error; // Re-throw to be caught by the caller

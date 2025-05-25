@@ -14,7 +14,6 @@ process.on('unhandledRejection', (reason, promise) => {
 (async () => {
   try {
     await connect();
-    console.log('Connected to ATEM successfully');
   } catch (error) {
     console.error('Failed to connect to ATEM:', error);
     await cleanUp();
