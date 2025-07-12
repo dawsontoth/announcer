@@ -158,6 +158,13 @@ npx jest src/utils/capitalize.test.ts
 - It monitors state changes (program/preview changes, transitions, keyers)
 - When state changes occur, it plays audio announcements using text-to-speech
 
+To emulate this:
+```bash
+git clone https://github.com/jonknoll/pyAtemSim.git
+cd pyAtemSim
+python atem_server.py
+```
+
 ### Environment Variables
 
 - Environment variables are parsed using the `envToCSV` utility for comma-separated values
