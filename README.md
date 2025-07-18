@@ -30,11 +30,23 @@ This document provides guidelines for development on the Announcer project, whic
 ```
 curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs
+git clone https://github.com/dawsontoth/announcer.git
+cd announcer
+cp .env.example .env
+pico .env
+# update your .env appropriately
 
-which node
-# /usr/bin/node
+which npm
+# /usr/bin/npm
+
+pwd
+# /home/trinity/announcer
+
 sudo crontab -e
-@reboot (cd /home/trinity/announcer/ && /usr/bin/node index.js) &
+@reboot (cd /home/trinity/announcer/ && /usr/bin/npm start) &
+
+sudo reboot now
+echo "party time"
 ```
 
 ### Installation

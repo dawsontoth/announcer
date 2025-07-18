@@ -21,11 +21,11 @@ const intoDir = './speech.cache/';
 
 try {
   if (!existsSync(intoDir)) {
-    console.log(`Creating cache directory: ${ intoDir }`);
+    console.log(`Creating cache directory: ${intoDir}`);
     mkdirSync(intoDir);
   }
 } catch (error) {
-  console.error(`Failed to create cache directory ${ intoDir }:`, error);
+  console.error(`Failed to create cache directory ${intoDir}:`, error);
   throw error;
 }
 
@@ -43,15 +43,15 @@ export async function convertTextToSpeech(text: string): Promise<string> {
   // Create a hash of the text for a more robust filename
   const hash = crypto.createHash('md5').update(text).digest('hex');
   const safeText = text.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 50);
-  const speechFile = join(intoDir, `${ safeText }_${ hash }.mp3`);
+  const speechFile = join(intoDir, `${safeText}_${hash}.mp3`);
 
   // Check if the file already exists in cache
   if (existsSync(speechFile)) {
-    console.log(`Using cached speech file for "${ text }": ${ speechFile }`);
+    console.log(`Using cached speech file for "${text}": ${speechFile}`);
     return speechFile;
   }
 
-  console.log(`Converting text to speech via OpenAI API: "${ text }"`);
+  console.log(`Converting text to speech via OpenAI API: "${text}"`);
 
   // Call OpenAI API with retry logic
   let retries = 3;
@@ -63,7 +63,7 @@ export async function convertTextToSpeech(text: string): Promise<string> {
         model: 'gpt-4o-mini-tts',
         voice: 'coral',
         input: text,
-        instructions: 'Speak in a fast, cheerful and positive tone.'
+        instructions: 'Speak in a fast, cheerful and positive tone.',
       });
       break; // Success, exit the retry loop
     } catch (apiError) {
@@ -71,7 +71,7 @@ export async function convertTextToSpeech(text: string): Promise<string> {
       if (retries === 0) {
         throw apiError; // No more retries, re-throw the error
       }
-      console.warn(`OpenAI API call failed, retrying (${ retries } attempts left):`, apiError);
+      console.warn(`OpenAI API call failed, retrying (${retries} attempts left):`, apiError);
       await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
     }
   }
@@ -84,7 +84,7 @@ export async function convertTextToSpeech(text: string): Promise<string> {
   try {
     const buffer = Buffer.from(await mp3.arrayBuffer());
     await fs.promises.writeFile(speechFile, buffer);
-    console.log(`Speech file saved: ${ speechFile }`);
+    console.log(`Speech file saved: ${speechFile}`);
   } catch (fileError) {
     console.error('Failed to write speech file:', fileError);
     throw fileError;

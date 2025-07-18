@@ -1,10 +1,10 @@
 import { Atem, AtemState } from 'atem-connection';
 import type { InputChannel } from 'atem-connection/dist/state/input';
-import { play } from 'src/audio';
-import { env } from 'src/env';
-import { convertTextToSpeech } from 'src/openai';
-import { formatString } from 'src/utils/format-string';
-import { sleep } from 'src/utils/sleep';
+import { play } from './audio.ts';
+import { env } from './env.ts';
+import { convertTextToSpeech } from './openai.ts';
+import { formatString } from './utils/format-string.ts';
+import { sleep } from './utils/sleep.ts';
 
 const myAtem = new Atem();
 

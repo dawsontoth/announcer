@@ -1,6 +1,6 @@
-import playSound from 'play-sound';
-import { convertTextToSpeech } from 'src/openai';
 import { existsSync } from 'node:fs';
+import playSound from 'play-sound';
+import { convertTextToSpeech } from './openai.ts';
 
 let audios: any[] = [];
 const player = playSound({});

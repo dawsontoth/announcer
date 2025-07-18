@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { formatString } from 'src/utils/format-string';
+import { formatString } from './format-string.ts';
 
 describe('formatString', () => {
   test('replaces {name} with the provided name', () => {

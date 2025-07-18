@@ -1,5 +1,5 @@
-import { connect, disconnect } from 'src/atem';
-import { stopAll } from 'src/audio';
+import { connect, disconnect } from './atem.ts';
+import { stopAll } from './audio.ts';
 
 process.on('SIGINT', cleanUp);
 process.on('uncaughtException', error => {

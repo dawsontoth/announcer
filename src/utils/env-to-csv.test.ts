@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { envToCSV } from 'src/utils/env-to-csv';
+import { envToCSV } from './env-to-csv.ts';
 
 describe('envToCSV', () => {
   test('splits a comma-separated string into an array', () => {

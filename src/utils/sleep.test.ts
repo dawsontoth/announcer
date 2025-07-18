@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
-import { sleep } from 'src/utils/sleep';
+import { sleep } from './sleep.ts';
 
 describe('sleep', () => {
   // Use fake timers to avoid actual waiting in tests

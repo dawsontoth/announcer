@@ -1,4 +1,4 @@
-import { envToCSV } from 'src/utils/env-to-csv';
+import { envToCSV } from './utils/env-to-csv.ts';
 
 /**
  * Validates that an environment variable exists and returns its value
@@ -45,7 +45,7 @@ export const env = {
   cutFormat: getEnvVar('CUT_FORMAT', 'cut {0}'),
   previewFormat: getEnvVar('PREVIEW_FORMAT', '{0} next'),
   keyerOnFormat: getEnvVar('KEYER_ON_FORMAT', '{0} is on'),
-  keyerOffFormat: getEnvVar('KEYER_OFF_FORMAT', '{0} is off')
+  keyerOffFormat: getEnvVar('KEYER_OFF_FORMAT', '{0} is off'),
 } as const;
 
 if (!env.atemIP.match(/^\d+\.\d+\.\d+\.\d+$/)) {

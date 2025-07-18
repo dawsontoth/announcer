@@ -3,6 +3,7 @@
     "baseUrl": "./",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "rewriteRelativeImportExtensions": true,
     "lib": ["ES2018"],
     "module": "ESNext",
     "moduleResolution": "node",
@@ -11,7 +12,7 @@
     "rootDir": "./src",
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2018"
+    "target": "ESNext"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
