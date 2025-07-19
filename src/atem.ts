@@ -7,6 +7,7 @@ import { formatString } from './utils/format-string.ts';
 import { sleep } from './utils/sleep.ts';
 
 const myAtem = new Atem();
+const superSourceIdToName: Record<number, string> = {};
 
 export async function connect(): Promise<void> {
   try {
@@ -60,21 +61,16 @@ async function connected(): Promise<void> {
     const superSources = Object.values(myAtem.state?.inputs || {}).filter((input): input is InputChannel => !!input?.shortName?.startsWith('SS'));
     console.log(`Found ${superSources.length} super sources`);
 
-    for (const superSource of superSources) {
+    for (let i = 0; i < superSources.length; i++) {
+      const superSource = superSources[i];
       try {
-        const superSourceNumber = parseInt(superSource.shortName.replace(/ss/ig, ''), 10);
-        if (isNaN(superSourceNumber) || superSourceNumber < 1 || superSourceNumber > env.superSourceNames.length) {
-          console.error(`Invalid super source number: ${superSource.shortName}`);
+        if (i >= env.superSourceNames.length) {
+          console.error(`Supersource ${i} with inputId ${superSource.inputId} not named in .env SUPER_SOURCE_NAMES`);
           continue;
         }
+        superSourceIdToName[superSource.inputId] = env.superSourceNames[i];
 
-        if (superSource.inputId < 1 || superSource.inputId > env.inputNames.length) {
-          console.error(`Super source input ID out of range: ${superSource.inputId}`);
-          continue;
-        }
-
-        env.inputNames[superSource.inputId - 1] = env.superSourceNames[superSourceNumber - 1];
-        console.log(`Mapped super source ${superSource.shortName} to "${env.superSourceNames[superSourceNumber - 1]}"`);
+        console.log(`Mapped super source ${superSource.shortName} with inputId ${superSource.inputId} to "${env.superSourceNames[i]}"`);
       } catch (error) {
         console.error(`Error processing super source ${superSource.shortName}:`, error);
       }
@@ -107,18 +103,18 @@ async function stateChanged(state: AtemState, pathToChange: string[]): Promise<v
     const previewInputIndex = mixEffect.previewInput - 1;
     const programInputIndex = mixEffect.programInput - 1;
 
-    if (previewInputIndex < 0 || previewInputIndex >= env.inputNames.length) {
+    if (!superSourceIdToName[previewInputIndex] && (previewInputIndex < 0 || previewInputIndex >= env.inputNames.length)) {
       console.error(`Preview input index out of range: ${previewInputIndex}`);
       return;
     }
 
-    if (programInputIndex < 0 || programInputIndex >= env.inputNames.length) {
+    if (!superSourceIdToName[programInputIndex] && (programInputIndex < 0 || programInputIndex >= env.inputNames.length)) {
       console.error(`Program input index out of range: ${programInputIndex}`);
       return;
     }
 
-    const previewName = env.inputNames[previewInputIndex];
-    const programName = env.inputNames[programInputIndex];
+    const previewName = superSourceIdToName[previewInputIndex] || env.inputNames[previewInputIndex];
+    const programName = superSourceIdToName[programInputIndex] || env.inputNames[programInputIndex];
 
     if (pathToChange.includes('video.mixEffects.0.transitionPosition')) {
       if (pathToChange.includes('video.mixEffects.0.programInput')) {
