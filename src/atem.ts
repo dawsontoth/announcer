@@ -103,18 +103,18 @@ async function stateChanged(state: AtemState, pathToChange: string[]): Promise<v
     const previewInputIndex = mixEffect.previewInput - 1;
     const programInputIndex = mixEffect.programInput - 1;
 
-    if (!superSourceIdToName[previewInputIndex] && (previewInputIndex < 0 || previewInputIndex >= env.inputNames.length)) {
+    if (!superSourceIdToName[mixEffect.previewInput] && (previewInputIndex < 0 || previewInputIndex >= env.inputNames.length)) {
       console.error(`Preview input index out of range: ${previewInputIndex}`);
       return;
     }
 
-    if (!superSourceIdToName[programInputIndex] && (programInputIndex < 0 || programInputIndex >= env.inputNames.length)) {
+    if (!superSourceIdToName[mixEffect.programInput] && (programInputIndex < 0 || programInputIndex >= env.inputNames.length)) {
       console.error(`Program input index out of range: ${programInputIndex}`);
       return;
     }
 
-    const previewName = superSourceIdToName[previewInputIndex] || env.inputNames[previewInputIndex];
-    const programName = superSourceIdToName[programInputIndex] || env.inputNames[programInputIndex];
+    const previewName = superSourceIdToName[mixEffect.previewInput] || env.inputNames[previewInputIndex];
+    const programName = superSourceIdToName[mixEffect.programInput] || env.inputNames[programInputIndex];
 
     if (pathToChange.includes('video.mixEffects.0.transitionPosition')) {
       if (pathToChange.includes('video.mixEffects.0.programInput')) {
