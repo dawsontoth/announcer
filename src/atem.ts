@@ -34,6 +34,17 @@ export async function connect(): Promise<void> {
         // Continue with other keyers even if one fails
       }
     }
+    for (const superSourceName of env.superSourceNames) {
+      try {
+        await convertTextToSpeech(formatString(env.fadedFormat, superSourceName));
+        await convertTextToSpeech(formatString(env.fadingFormat, superSourceName));
+        await convertTextToSpeech(formatString(env.cutFormat, superSourceName));
+        await convertTextToSpeech(formatString(env.previewFormat, superSourceName));
+      } catch (error) {
+        console.error(`Failed to precompute speech for supersource "${superSourceName}":`, error);
+        // Continue with other superSourceNames even if one fails
+      }
+    }
 
     console.log('Setting up ATEM connection...');
     myAtem.on('connected', connected);
