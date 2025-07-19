@@ -138,7 +138,7 @@ async function stateChanged(state: AtemState, pathToChange: string[]): Promise<v
     // TODO: Support multiple keyers.
     if (pathToChange.includes('video.mixEffects.0.upstreamKeyers.0.onAir')) {
       // Validate keyer structure
-      if (!mixEffect.upstreamKeyers?.[0]?.onAir) {
+      if (mixEffect.upstreamKeyers?.[0]?.onAir === undefined) {
         console.error('Invalid keyer structure:', mixEffect.upstreamKeyers);
         return;
       }
