@@ -33,7 +33,7 @@ export async function play(text: string): Promise<void> {
     console.log(`Playing audio: "${text}" from ${audioFile}`);
 
     // Play the audio file
-    const audio = player.play(audioFile, { mplayer: ['-ss', '0.15'] }, err => {
+    const audio = player.play(audioFile, err => {
       if (err) {
         console.error(`Error playing audio "${text}":`, err);
       }

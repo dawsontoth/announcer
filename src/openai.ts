@@ -1,4 +1,5 @@
 import { Buffer } from 'node:buffer';
+import { execSync } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs, { existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -44,6 +45,7 @@ export async function convertTextToSpeech(text: string): Promise<string> {
   const hash = crypto.createHash('md5').update(text).digest('hex');
   const safeText = text.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 50);
   const speechFile = join(intoDir, `${safeText}_${hash}.mp3`);
+  const speechFileRaw = join(intoDir, `${safeText}_${hash}_raw.mp3`);
 
   // Check if the file already exists in cache
   if (existsSync(speechFile)) {
@@ -83,8 +85,9 @@ export async function convertTextToSpeech(text: string): Promise<string> {
   // Convert the response to a buffer and write to file
   try {
     const buffer = Buffer.from(await mp3.arrayBuffer());
-    await fs.promises.writeFile(speechFile, buffer);
-    console.log(`Speech file saved: ${speechFile}`);
+    await fs.promises.writeFile(speechFileRaw, buffer);
+    console.log('Cutting off silence from the start via ffmpeg');
+    execSync(`ffmpeg -i ${speechFileRaw} -af silenceremove=1:0:-50dB -y ${speechFile}`);
   } catch (fileError) {
     console.error('Failed to write speech file:', fileError);
     throw fileError;
