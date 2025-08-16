@@ -65,7 +65,7 @@ export async function convertTextToSpeech(text: string): Promise<string> {
         model: 'gpt-4o-mini-tts',
         voice: 'coral',
         input: text,
-        instructions: 'Speak in a fast, cheerful and positive tone.',
+        instructions: 'Speak in a quick, neutral and positive tone.',
       });
       break; // Success, exit the retry loop
     } catch (apiError) {
