@@ -5,6 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
+    "postinstall": "npm run build",
     "build": "tsc",
     "start": "dotenv -- node dist/index.js",
     "sim": "(cd pyAtemSim && python3 ./atem_server.py)",
