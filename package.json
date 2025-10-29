@@ -20,7 +20,7 @@
   "dependencies": {
     "atem-connection": "^3.6.0",
     "dotenv": "^17.2.0",
-    "dotenv-cli": "^10.0.0",
+    "dotenv-cli": "^11.0.0",
     "openai": "^6.0.0",
     "play-sound": "^1.1.6"
   },
