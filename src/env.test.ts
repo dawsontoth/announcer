@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { formatString } from './utils/format-string.ts';
 
 // Helper to reset module cache between tests
 async function importEnvModule() {
@@ -54,12 +55,12 @@ describe('env.ts', () => {
     expect(env.inputNames[19]).toBe('20');
 
     // Format defaults
-    expect(env.fadedFormat).toBe('{0} is now live');
-    expect(env.fadingFormat).toBe('fading in {0}');
-    expect(env.cutFormat).toBe('cut {0}');
-    expect(env.previewFormat).toBe('{0} next');
-    expect(env.keyerOnFormat).toBe('{0} is on');
-    expect(env.keyerOffFormat).toBe('{0} is off');
+    expect(env.fadedFormat).toBe('{name} is now live');
+    expect(env.fadingFormat).toBe('fading in {name}');
+    expect(env.cutFormat).toBe('cut {name}');
+    expect(env.previewFormat).toBe('{name} next');
+    expect(env.keyerOnFormat).toBe('{name} is on');
+    expect(env.keyerOffFormat).toBe('{name} is off');
   });
 
   test('logs warnings when defaults are used', async () => {
@@ -94,21 +95,53 @@ describe('env.ts', () => {
     process.env.KEYER_NAMES = 'Y';
 
     process.env.INPUT_NAMES = 'Cam1,Cam2';
-    process.env.FADED_FORMAT = 'Live: {0}';
-    process.env.FADING_FORMAT = 'Up next: {0}';
-    process.env.CUT_FORMAT = 'Cut to {0}';
-    process.env.PREVIEW_FORMAT = 'Preview {0}';
-    process.env.KEYER_ON_FORMAT = '{0} on';
-    process.env.KEYER_OFF_FORMAT = '{0} off';
+    process.env.FADED_FORMAT = 'Live: {name}';
+    process.env.FADING_FORMAT = 'Up next: {name}';
+    process.env.CUT_FORMAT = 'Cut to {name}';
+    process.env.PREVIEW_FORMAT = 'Preview {name}';
+    process.env.KEYER_ON_FORMAT = '{name} on';
+    process.env.KEYER_OFF_FORMAT = '{name} off';
 
     const { env } = await importEnvModule();
 
     expect(env.inputNames).toEqual(['Cam1', 'Cam2']);
-    expect(env.fadedFormat).toBe('Live: {0}');
-    expect(env.fadingFormat).toBe('Up next: {0}');
-    expect(env.cutFormat).toBe('Cut to {0}');
-    expect(env.previewFormat).toBe('Preview {0}');
-    expect(env.keyerOnFormat).toBe('{0} on');
-    expect(env.keyerOffFormat).toBe('{0} off');
+    expect(env.fadedFormat).toBe('Live: {name}');
+    expect(env.fadingFormat).toBe('Up next: {name}');
+    expect(env.cutFormat).toBe('Cut to {name}');
+    expect(env.previewFormat).toBe('Preview {name}');
+    expect(env.keyerOnFormat).toBe('{name} on');
+    expect(env.keyerOffFormat).toBe('{name} off');
+  });
+
+  test('default formats render through formatString without leftover placeholders', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {
+    });
+
+    process.env.ATEM_IP = '192.168.0.3';
+    process.env.SUPER_SOURCE_NAMES = 'SS1';
+    process.env.KEYER_NAMES = 'Key1';
+    delete process.env.FADED_FORMAT;
+    delete process.env.FADING_FORMAT;
+    delete process.env.CUT_FORMAT;
+    delete process.env.PREVIEW_FORMAT;
+    delete process.env.KEYER_ON_FORMAT;
+    delete process.env.KEYER_OFF_FORMAT;
+
+    const { env } = await importEnvModule();
+
+    const defaults = [
+      env.fadedFormat,
+      env.fadingFormat,
+      env.cutFormat,
+      env.previewFormat,
+      env.keyerOnFormat,
+      env.keyerOffFormat,
+    ];
+
+    for (const template of defaults) {
+      const spoken = formatString(template, 'Piano');
+      expect(spoken).toContain('Piano');
+      expect(spoken).not.toMatch(/[{}]/);
+    }
   });
 });
