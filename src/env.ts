@@ -40,12 +40,12 @@ export const env = {
   inputNames: getEnvVarAsCSV('INPUT_NAMES', [...Array(21).keys()].slice(1).join(',')),
   keyerNames: getEnvVarAsCSV('KEYER_NAMES'),
 
-  fadedFormat: getEnvVar('FADED_FORMAT', '{0} is now live'),
-  fadingFormat: getEnvVar('FADING_FORMAT', 'fading in {0}'),
-  cutFormat: getEnvVar('CUT_FORMAT', 'cut {0}'),
-  previewFormat: getEnvVar('PREVIEW_FORMAT', '{0} next'),
-  keyerOnFormat: getEnvVar('KEYER_ON_FORMAT', '{0} is on'),
-  keyerOffFormat: getEnvVar('KEYER_OFF_FORMAT', '{0} is off'),
+  fadedFormat: getEnvVar('FADED_FORMAT', '{name} is now live'),
+  fadingFormat: getEnvVar('FADING_FORMAT', 'fading in {name}'),
+  cutFormat: getEnvVar('CUT_FORMAT', 'cut {name}'),
+  previewFormat: getEnvVar('PREVIEW_FORMAT', '{name} next'),
+  keyerOnFormat: getEnvVar('KEYER_ON_FORMAT', '{name} is on'),
+  keyerOffFormat: getEnvVar('KEYER_OFF_FORMAT', '{name} is off'),
 } as const;
 
 if (!env.atemIP.match(/^\d+\.\d+\.\d+\.\d+$/)) {
