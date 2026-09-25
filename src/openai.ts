@@ -14,7 +14,7 @@ try {
   }
 } catch (error) {
   console.error('Failed to initialize OpenAI client:', error);
-  throw new Error('OpenAI client initialization failed. Please check your configuration.');
+  throw new Error('OpenAI client initialization failed. Please check your configuration.', { cause: error });
 }
 
 // Cache directory setup

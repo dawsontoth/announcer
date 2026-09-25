@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["ES2018"],
+    "lib": ["ES2022"],
     "module": "ESNext",
     "moduleResolution": "node",
     "outDir": "./dist",
