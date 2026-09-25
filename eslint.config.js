@@ -1,7 +1,7 @@
 // eslint.config.js
 import { defineConfig, globalIgnores } from 'eslint/config';
 import tseslint from '@typescript-eslint/eslint-plugin';
-import importPlugin from 'eslint-plugin-import';
+import importPlugin, { createNodeResolver } from 'eslint-plugin-import-x';
 import tsParser from '@typescript-eslint/parser';
 import eslintJs from '@eslint/js';
 
@@ -11,8 +11,12 @@ export default defineConfig([
   {
     files: ['**/*.ts'],
     extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
+    settings: {
+      // The typescript preset expects eslint-import-resolver-typescript; the built-in node resolver is enough here.
+      'import-x/resolver-next': [createNodeResolver()],
+    },
     rules: {
-      'import/extensions': ['error', 'ignorePackages', { 'js': 'always', 'jsx': 'always', 'ts': 'always', 'tsx': 'always' }],
+      'import-x/extensions': ['error', 'ignorePackages', { 'js': 'always', 'jsx': 'always', 'ts': 'always', 'tsx': 'always' }],
     },
   },
   {
