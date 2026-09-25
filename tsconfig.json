@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "allowImportingTsExtensions": true,
-    "baseUrl": "./",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2018"],
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "outDir": "./dist",
     "resolveJsonModule": true,
     "rewriteRelativeImportExtensions": true,
     "rootDir": "./src",
     "skipLibCheck": true,
     "strict": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "types": ["node"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

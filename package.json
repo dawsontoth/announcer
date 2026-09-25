@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "postinstall": "npm run build",
-    "build": "tsc",
+    "build": "node node_modules/typescript-native/bin/tsc",
     "start": "dotenv -- node dist/index.js",
     "sim": "(cd pyAtemSim && python3 ./atem_server.py)",
     "dev": "dotenv -- tsx src/index.ts",
@@ -39,6 +39,7 @@
     "prettier": "^3.6.2",
     "ts-jest": "^29.4.0",
     "tsx": "^4.20.3",
-    "typescript": "^7.0.0"
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "typescript-native": "npm:typescript@^7.0.2"
   }
 }
